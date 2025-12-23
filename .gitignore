@@ -1,0 +1,38 @@
+# =========================
+# Python / Django
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env
+.env*
+!.env.dev.example
+!.env.prod.example
+
+# =========================
+# Django specific
+# =========================
+*.log
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# =========================
+# IDE / Editor
+# =========================
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# =========================
+# OS
+# =========================
+Thumbs.db
