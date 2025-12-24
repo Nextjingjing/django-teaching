@@ -3,7 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Question
-from .serializers import QuestionSerializer
+from .serializers import QuestionSerializer, QuestionCreateSerializer
+from django.utils import timezone
 
 # Create your views here.
 class HelloWorld(APIView):
@@ -54,6 +55,26 @@ class QuestionListCreate(APIView):
             "data": serializer.data
         }
         return Response(res)
+    
+    def post(self, request):
+        serializer = QuestionCreateSerializer(data=request.data)
+
+        if serializer.is_valid():
+            question = Question.objects.create(
+                question_text=serializer.validated_data["question_text"],
+                pub_date=timezone.now()
+            )
+
+            response_serializer = QuestionSerializer(instance = question)
+            return Response(
+                response_serializer.data,
+                status=status.HTTP_201_CREATED
+            )
+
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 # Update Delete Read One Question
 class QuestionDetail(APIView):
