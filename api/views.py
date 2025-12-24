@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from .models import Question
+from .serializers import QuestionSerializer
 
 # Create your views here.
 class HelloWorld(APIView):
@@ -40,4 +42,15 @@ class HelloWorldVar(APIView):
             {
                 "msg": f"Hello {var1} and {var2}"
             }
+        )
+    
+# Create Read Many Question
+
+# Update Delete Read One Question
+class QuestionDetail(APIView):
+    def get(self, request, id):
+        question = get_object_or_404(Question, pk=id)
+        serializer = QuestionSerializer(instance = question)
+        return Response(
+            serializer.data
         )
