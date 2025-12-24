@@ -31,6 +31,7 @@ ALLOWED_HOSTS = environ.get("ALLOWED_HOSTS", "").split(",") if not DEBUG else []
 # Application definition
 
 INSTALLED_APPS = [
+    'api',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
