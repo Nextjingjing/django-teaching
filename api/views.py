@@ -45,6 +45,15 @@ class HelloWorldVar(APIView):
         )
     
 # Create Read Many Question
+class QuestionListCreate(APIView):
+    def get(self, request):
+        question = Question.objects.all()
+        serializer = QuestionSerializer(instance = question, many=True)
+        res = {
+            "msg": "Success",
+            "data": serializer.data
+        }
+        return Response(res)
 
 # Update Delete Read One Question
 class QuestionDetail(APIView):

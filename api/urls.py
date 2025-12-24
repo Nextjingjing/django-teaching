@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HelloWorld, HelloWorldId, HelloWorldVar, QuestionDetail
+from .views import HelloWorld, HelloWorldId, HelloWorldVar, QuestionDetail, QuestionListCreate
 
 urlpatterns = [
     path("hello/", HelloWorld.as_view()),
@@ -7,4 +7,5 @@ urlpatterns = [
     path("hellovar/", HelloWorldVar.as_view()),
 
     path("questions/<int:id>/", QuestionDetail.as_view()),
+    path("questions/", QuestionListCreate.as_view()),
 ]
