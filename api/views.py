@@ -22,3 +22,22 @@ class HelloWorld(APIView):
                 "age": age
             }
         )
+    
+class HelloWorldId(APIView):
+    def get(self, request, id):
+        return Response(
+            {
+                "msg": "hello",
+                "id": id
+            }
+        )
+    
+class HelloWorldVar(APIView):
+    def get(self, request):
+        var1 = request.query_params.get("var1", "DRF1")
+        var2 = request.query_params.get("var2", "DRF2")
+        return Response(
+            {
+                "msg": f"Hello {var1} and {var2}"
+            }
+        )
