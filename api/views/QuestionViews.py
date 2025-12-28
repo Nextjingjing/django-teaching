@@ -19,23 +19,19 @@ class QuestionListCreate(APIView):
     
     def post(self, request):
         serializer = QuestionCreateSerializer(data=request.data)
-
-        if serializer.is_valid():
-            question = Question.objects.create(
+        serializer.is_valid(raise_exception=True)
+        question = Question.objects.create(
                 question_text=serializer.validated_data["question_text"],
                 pub_date=timezone.now()
             )
 
-            response_serializer = QuestionSerializer(instance = question)
-            return Response(
-                response_serializer.data,
-                status=status.HTTP_201_CREATED
-            )
-
+        response_serializer = QuestionSerializer(instance = question)
         return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
-        )
+            response_serializer.data,
+            status=status.HTTP_201_CREATED
+            )
+            
+
 
 # Update Delete Read One Question
 class QuestionDetail(APIView):
