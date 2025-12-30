@@ -40,3 +40,25 @@ class QuestionDetail(APIView):
         return Response(
             serializer.data
         )
+    
+    def put(self, request, id):
+        question = get_object_or_404(Question, pk=id)
+        serializer = QuestionCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        question.question_text = serializer.validated_data["question_text"]
+        question.save()
+        serializer = QuestionSerializer(instance = question)
+        return Response(
+            serializer.data
+        )
+    
+    def delete(self, request, id):
+        question = get_object_or_404(Question, pk=id)
+        question.delete()
+        return Response(
+            {
+                "msg": "Deleted!"
+            },
+            status=status.HTTP_204_NO_CONTENT
+        )
+    
