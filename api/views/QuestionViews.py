@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 from ..models import Question
 from ..serializers import QuestionSerializer, QuestionCreateSerializer
 from django.utils import timezone
@@ -9,13 +10,12 @@ from django.utils import timezone
 # Create Read Many Question
 class QuestionListCreate(APIView):
     def get(self, request):
-        question = Question.objects.all()
-        serializer = QuestionSerializer(instance = question, many=True)
-        res = {
-            "msg": "Success",
-            "data": serializer.data
-        }
-        return Response(res)
+        questions = Question.objects.all()
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
+        result_page = paginator.paginate_queryset(questions, request)
+        serializer = QuestionSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
     
     def post(self, request):
         serializer = QuestionCreateSerializer(data=request.data)
@@ -31,7 +31,6 @@ class QuestionListCreate(APIView):
             status=status.HTTP_201_CREATED
             )
             
-
 
 # Update Delete Read One Question
 class QuestionDetail(APIView):
