@@ -44,7 +44,8 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
-    ]
+    ],
+    'EXCEPTION_HANDLER': 'my_django.exceptions.custom_exception_handler',
 }
 
 MIDDLEWARE = [

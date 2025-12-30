@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from ..exceptions import ServiceUnavailable
 
 # Create your views here.
 class HelloWorld(APIView):
@@ -40,3 +41,14 @@ class HelloWorldVar(APIView):
                 "msg": f"Hello {var1} and {var2}"
             }
         )
+    
+class HelloError(APIView):
+    def get(self, request):
+        raise ServiceUnavailable()
+        # numbers = [1, 2, 3, 4, 5]
+        # a = numbers[999]
+        # return Response(
+        #     {
+        #         "msg": a
+        #     }
+        # )
