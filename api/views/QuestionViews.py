@@ -7,10 +7,16 @@ from ..models import Question
 from ..serializers import QuestionSerializer, QuestionCreateSerializer
 from django.utils import timezone
 
+from ..services.QuestionService import QuestionService
+
+
 # Create Read Many Question
 class QuestionListCreate(APIView):
     def get(self, request):
-        questions = Question.objects.all()
+        # Business logic
+        questions = QuestionService.list_questions()
+
+        # Presentation Response
         paginator = PageNumberPagination()
         paginator.page_size = 10
         result_page = paginator.paginate_queryset(questions, request)
@@ -18,13 +24,16 @@ class QuestionListCreate(APIView):
         return paginator.get_paginated_response(serializer.data)
     
     def post(self, request):
+        # Presentation (Request)
         serializer = QuestionCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        question = Question.objects.create(
-                question_text=serializer.validated_data["question_text"],
-                pub_date=timezone.now()
-            )
 
+        # Business Logic
+        question = QuestionService.create_question(
+            question_text=serializer.validated_data["question_text"]
+        )
+
+        # Presentation (Response)
         response_serializer = QuestionSerializer(instance = question)
         return Response(
             response_serializer.data,

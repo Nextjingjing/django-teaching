@@ -8,6 +8,9 @@ from ..serializers import ChoiceCreateSerializer, ChoiceSerializer
 from django.utils import timezone
 from django.db import transaction
 
+from ..services.ChoiceService import ChoiceService
+
+
 class ChoiceListCreate(APIView):
     def get(self, request, question_id):
         question = get_object_or_404(Question, pk=question_id)
@@ -29,19 +32,15 @@ class ChoiceListCreate(APIView):
 
 class ChoiceVote(APIView):
     def post(self, request, choice_id):
-        with transaction.atomic():
-            try:
-                choice = Choice.objects.select_for_update().get(id=choice_id)
-            except Choice.DoesNotExist:
-                return Response(status=status.HTTP_404_NOT_FOUND)
-            choice.votes += 1
-            choice.save()
-            return Response(
-                {
-                    "msg": "vote success!"
-                },
-                status=status.HTTP_200_OK
-            )
+        # Business Logic
+        ChoiceService.vote_choice(choice_id=choice_id)
+
+        return Response(
+        {
+                "msg": "vote success!"
+            },
+            status=status.HTTP_200_OK
+        )
         
 class ChoiceDetail(APIView):
     def get(self, request, choice_id):
